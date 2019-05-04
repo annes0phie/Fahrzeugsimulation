@@ -371,3 +371,6 @@ assignin('base','acc_brakes',acc_brakes);
 acc_breakpoints = 0:1:5;
 assignin('base','acc_breakpoints',acc_breakpoints);
 
+
+sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
+
