@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 10-Apr-2019 10:16:30
+% Last Modified by GUIDE v2.5 04-May-2019 16:30:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -318,8 +318,8 @@ dt = str2double(get(handles.dt, 'String'));
 assignin('base','dt',dt);
 
 A = [1;0];
-assignin('base','A',A);
 Ad = eye(2) + A * dt;
+assignin('base','A',A);
 assignin('base','Ad',Ad);
 Bd = [dt^2/2;dt];
 assignin('base','Bd',Bd);
@@ -371,6 +371,24 @@ assignin('base','acc_brakes',acc_brakes);
 acc_breakpoints = 0:1:5;
 assignin('base','acc_breakpoints',acc_breakpoints);
 
+simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
+v = simout.get('v');
+assignin('base','v',v);
+t = simout.get('t');
+assignin('base','t',t);
+s = simout.get('s');
+assignin('base','s',s);
+a = simout.get('a');
+assignin('base','a',a);
 
-sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
+axes(handles.plot1);
+plot(FBv, FBh);
 
+axes(handles.plot2);
+plot(t, v);
+
+axes(handles.plot3);
+plot(t, s);
+
+axes(handles.plot4);
+plot(t, a);
