@@ -22,7 +22,7 @@ function varargout = Test(varargin)
 
 % Edit the above text to modify the response to help Test
 
-% Last Modified by GUIDE v2.5 04-May-2019 16:54:50
+% Last Modified by GUIDE v2.5 05-May-2019 16:31:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,6 +81,7 @@ function tab1_Callback(hObject, eventdata, handles)
 
 %set(handles.panel1,'visible', 'on')
 set(handles.panel2, 'visible', 'off')
+set(handles.panel3, 'visible', 'off')
 
 
 % --- Executes on button press in tab2.
@@ -89,4 +90,12 @@ function tab2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(handles.panel2, 'visible', 'on')
-%set(handles.panel1, 'visible', 'off')
+set(handles.panel3, 'visible', 'off')
+
+
+% --- Executes on button press in tab3.
+function tab3_Callback(hObject, eventdata, handles)
+% hObject    handle to tab3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.panel3, 'visible', 'on')

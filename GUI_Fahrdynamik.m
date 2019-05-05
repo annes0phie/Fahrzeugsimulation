@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 04-May-2019 16:30:10
+% Last Modified by GUIDE v2.5 05-May-2019 17:28:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -372,6 +372,7 @@ acc_breakpoints = 0:1:5;
 assignin('base','acc_breakpoints',acc_breakpoints);
 
 simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
+%simout = sim('startFahrdym');
 v = simout.get('v');
 assignin('base','v',v);
 t = simout.get('t');
@@ -383,12 +384,136 @@ assignin('base','a',a);
 
 axes(handles.plot1);
 plot(FBv, FBh);
+xlabel(handles.plot1,'FBv')
+ylabel(handles.plot1,'FBh')
 
 axes(handles.plot2);
 plot(t, v);
+xlabel(handles.plot2,'Zeit')
+ylabel(handles.plot2,'Geschwindigkeit')
 
 axes(handles.plot3);
 plot(t, s);
+xlabel(handles.plot3,'Zeit')
+ylabel(handles.plot3,'Strecke')
 
 axes(handles.plot4);
 plot(t, a);
+xlabel(handles.plot4,'Zeit')
+ylabel(handles.plot4,'Beschleunigung')
+
+
+% --- Executes on button press in tab_ld.
+function tab_ld_Callback(hObject, eventdata, handles)
+% hObject    handle to tab_ld (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.panel_kreis, 'visible', 'off')
+set(handles.panel_gr, 'visible', 'off')
+
+
+% --- Executes on button press in tab_kf.
+function tab_kf_Callback(hObject, eventdata, handles)
+% hObject    handle to tab_kf (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.panel_kreis, 'visible', 'on')
+set(handles.panel_gr, 'visible', 'off')
+
+
+% --- Executes on button press in tab_gr.
+function tab_gr_Callback(hObject, eventdata, handles)
+% hObject    handle to tab_gr (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.panel_kreis, 'visible', 'on')
+set(handles.panel_gr, 'visible', 'on')
+
+
+
+function kf_geschw_Callback(hObject, eventdata, handles)
+% hObject    handle to kf_geschw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of kf_geschw as text
+%        str2double(get(hObject,'String')) returns contents of kf_geschw as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function kf_geschw_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to kf_geschw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function kf_radius_Callback(hObject, eventdata, handles)
+% hObject    handle to kf_radius (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of kf_radius as text
+%        str2double(get(hObject,'String')) returns contents of kf_radius as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function kf_radius_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to kf_radius (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in btn_start_geschw.
+function btn_start_geschw_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_start_geschw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+v2 = str2double(get(handles.kf_geschw, 'String')); 
+assignin('base','v2', v2);
+
+axes(handles.plot5);
+%plot();
+xlabel(handles.plot5,'Zeit')
+ylabel(handles.plot5,'Geschwindigkeit')
+
+
+
+
+% --- Executes on button press in btn_start_radius.
+function btn_start_radius_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_start_radius (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+radius = str2double(get(handles.kf_radius, 'String')); 
+assignin('base','radius', radius);
+
+axes(handles.plot6);
+%plot();
+xlabel(handles.plot6,'Zeit')
+ylabel(handles.plot6,'Geschwindigkeit')
+
+% --- Executes on button press in btn_gr_start.
+function btn_gr_start_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_gr_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+axes(handles.plot7);
+%plot();
+xlabel(handles.plot7,'Fahrzeuggeschwindigkeit [m/s]')
+ylabel(handles.plot7,'Giergeschwindigkeit')
