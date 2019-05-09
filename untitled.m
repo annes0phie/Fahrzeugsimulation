@@ -32,7 +32,7 @@ plot(FBv,FBh);
 
 acc_brakes = [ 0 0 0 1 8 8];
 acc_breakpoints = 0:1:5;
-% sim('startFahrdym');
+sim('startFahrdym');
 % 
 % figure;
 % plot(t,a);
