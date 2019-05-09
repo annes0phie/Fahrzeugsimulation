@@ -488,7 +488,12 @@ v2 = str2double(get(handles.kf_geschw, 'String'));
 assignin('base','v2', v2);
 
 axes(handles.plot5);
-%isnt working
+
+%plot();
+xlabel(handles.plot5,'Zeit')
+ylabel(handles.plot5,'Geschwindigkeit')
+Diagramm46KonstanteGeschwindigkeit(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
+
 
 
 
@@ -500,16 +505,9 @@ function btn_start_radius_Callback(hObject, eventdata, handles)
 
 radius = str2double(get(handles.kf_radius, 'String')); 
 assignin('base','radius', radius);
-EG = 0.0058;
-SG = 0.0049;
-m = str2double(get(handles.m, 'String')); 
-theta = str2double(get(handles.theta, 'String')); 
-lv = str2double(get(handles.lv, 'String')); 
-l = str2double(get(handles.l, 'String')); 
-lh = l - lv;
+
 axes(handles.plot6);
 %plot();
-Plot_4_6_2(handles.plot6, radius, 9.81, lv, lh, EG, SG, 16, m, theta)
 xlabel(handles.plot6,'Zeit')
 ylabel(handles.plot6,'Geschwindigkeit')
 
@@ -520,13 +518,34 @@ function btn_gr_start_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 axes(handles.plot7);
+rSoll = 35;
+deltaH = 0:0.02:6;
+deltaControl = 1;
+v=27;
+m = 1550;
+theta = 2800;
+Cv = 75000;
+Ch = 150000;
+h = 0.5;
+l = 2.8;
+lv = 1.344;
+lh = 1.456;
+g = 9.81;
+%psi = 0.48;
 
-EG = 0.0058;
-SG = 0.0049;
-m = str2double(get(handles.m, 'String')); 
-theta = str2double(get(handles.theta, 'String')); 
-lv = str2double(get(handles.lv, 'String')); 
-l = str2double(get(handles.l, 'String')); 
-lh = l - lv;
+psi = lv/l;
+chi = h/l;
+mDivTheta = m / theta;
+SG = 0.00496;
+EG =0.005787;
+ChStern = 1./(g*SG); %20.5518;
+% ChStern = 1 ./ (g * SG);
+CvStern = convGradToCStern(EG, 0, g, ChStern);
+I_s =16;
+
+
 Plot_4_8(handles.plot7,9.81, lv, lh, EG, SG, 16, m, theta)
 
+%plot();
+xlabel(handles.plot7,'Fahrzeuggeschwindigkeit [m/s]')
+ylabel(handles.plot7,'Giergeschwindigkeit')

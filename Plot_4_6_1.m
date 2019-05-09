@@ -1,9 +1,9 @@
-function Diagramm46KonstanteGeschwindigkeit(plotInstance, v0, g, lv, lh, lEG, lSG, is, m, theta)
+function Plot_4_6_1(plotInstance, vStart, gravity, lv, lh, lEG, lSG, is, m, theta)
 
 deltaControlled = 0;
 deltaH = 0:0.02:6;
-v = 30;
-g = 9.81;
+v = vStart;
+g = gravity;
 
 EG = [max(-lEG, -lSG*0.9) 0 lEG];
 SG = lSG;  % SG must be greater than min(EG)!

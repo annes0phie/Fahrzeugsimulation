@@ -54,6 +54,6 @@ CvStern = convGradToCStern(EG, 0, g, ChStern);
 I_s =16;
  
 Diagramm46KonstanteGeschwindigkeit( 30, 9.81, lv, lh, EG, SG, 16, m, theta)
-%Plot_4_8(9.81, lv, lh, EG, SG, 16, m, theta)
+Plot_4_8(9.81, lv, lh, lEG, lSG, is, m, theta)
 
 
