@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 05-May-2019 17:28:55
+% Last Modified by GUIDE v2.5 10-May-2019 08:50:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -307,72 +307,72 @@ function btnL_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %guidata(hObject, handles);
-b = get(handles.beschleunigung, 'String');
-beschleunigung = str2double(b);
-assignin('base','beschleunigung',beschleunigung);
+
+% b = get(handles.beschleunigung, 'String');
+% beschleunigung = str2double(b);
+% assignin('base','beschleunigung',beschleunigung);
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
 
-dt = str2double(get(handles.dt, 'String')); 
-assignin('base','dt',dt);
-
-A = [1;0];
-Ad = eye(2) + A * dt;
-assignin('base','A',A);
-assignin('base','Ad',Ad);
-Bd = [dt^2/2;dt];
-assignin('base','Bd',Bd);
-C = eye(2);
-assignin('base','C',C);
-D = [0;0];
-assignin('base','D',D);
-
-m = str2double(get(handles.m, 'String')); 
-assignin('base','m',m);
-
-theta = str2double(get(handles.theta, 'String')); 
-assignin('base','theta',theta);
-
-Cv = str2double(get(handles.Cv, 'String')); 
-assignin('base','Cv',Cv);
-
-Ch = str2double(get(handles.Ch, 'String')); 
-assignin('base','Ch',Ch);
-
-h = str2double(get(handles.h, 'String')); 
-assignin('base','h',h);
-
-l = str2double(get(handles.l, 'String')); 
-assignin('base','l',l);
-
-lv = str2double(get(handles.lv, 'String')); 
-assignin('base','lv',lv);
-
-psi = lv/l;
-assignin('base','psi',psi);
-chi = h/l;
-assignin('base','chi',chi);
-
-z_top =(psi/chi);
-assignin('base','z_top',z_top);
-z_bottom = (-((1-psi)/chi));
-assignin('base','z_bottom',z_bottom);
-
-z = z_bottom:0.1:z_top;
-assignin('base','z',z);
-FBv = (z.*(1-psi+z.*chi));
-assignin('base','FBv',FBv);
-FBh = (z.*(psi-z.*chi));
-assignin('base','FBh',FBh);
-
-acc_brakes = [ 0 0 0 1 8 8];
-assignin('base','acc_brakes',acc_brakes);
-acc_breakpoints = 0:1:5;
-assignin('base','acc_breakpoints',acc_breakpoints);
+% dt = str2double(get(handles.dt, 'String')); 
+% assignin('base','dt',dt);
+% 
+% A = [1;0];
+% Ad = eye(2) + A * dt;
+% assignin('base','A',A);
+% assignin('base','Ad',Ad);
+% Bd = [dt^2/2;dt];
+% assignin('base','Bd',Bd);
+% C = eye(2);
+% assignin('base','C',C);
+% D = [0;0];
+% assignin('base','D',D);
+% 
+% m = str2double(get(handles.m, 'String')); 
+% assignin('base','m',m);
+% 
+% theta = str2double(get(handles.theta, 'String')); 
+% assignin('base','theta',theta);
+% 
+% Cv = str2double(get(handles.Cv, 'String')); 
+% assignin('base','Cv',Cv);
+% 
+% Ch = str2double(get(handles.Ch, 'String')); 
+% assignin('base','Ch',Ch);
+% 
+% h = str2double(get(handles.h, 'String')); 
+% assignin('base','h',h);
+% 
+% l = str2double(get(handles.l, 'String')); 
+% assignin('base','l',l);
+% 
+% lv = str2double(get(handles.lv, 'String')); 
+% assignin('base','lv',lv);
+% 
+% psi = lv/l;
+% assignin('base','psi',psi);
+% chi = h/l;
+% assignin('base','chi',chi);
+% 
+% z_top =(psi/chi);
+% assignin('base','z_top',z_top);
+% z_bottom = (-((1-psi)/chi));
+% assignin('base','z_bottom',z_bottom);
+% 
+% z = z_bottom:0.1:z_top;
+% assignin('base','z',z);
+% FBv = (z.*(1-psi+z.*chi));
+% assignin('base','FBv',FBv);
+% FBh = (z.*(psi-z.*chi));
+% assignin('base','FBh',FBh);
+% 
+% acc_brakes = [ 0 0 0 1 8 8];
+% assignin('base','acc_brakes',acc_brakes);
+% acc_breakpoints = 0:1:5;
+% assignin('base','acc_breakpoints',acc_breakpoints);
 
 simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
-%simout = sim('startFahrdym');
 v = simout.get('v');
 assignin('base','v',v);
 t = simout.get('t');
@@ -381,6 +381,15 @@ s = simout.get('s');
 assignin('base','s',s);
 a = simout.get('a');
 assignin('base','a',a);
+
+FBv = evalin('base', 'FBv');
+FBh = evalin('base', 'FBh');
+t = evalin('base', 't');
+v = evalin('base', 'v');
+s = evalin('base', 's');
+a = evalin('base', 'a');
+
+
 
 axes(handles.plot1);
 plot(FBv, FBh);
@@ -411,6 +420,7 @@ function tab_ld_Callback(hObject, eventdata, handles)
 
 set(handles.panel_kreis, 'visible', 'off')
 set(handles.panel_gr, 'visible', 'off')
+set(handles.panel_param, 'visible', 'off')
 
 
 % --- Executes on button press in tab_kf.
@@ -420,6 +430,8 @@ function tab_kf_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 set(handles.panel_kreis, 'visible', 'on')
 set(handles.panel_gr, 'visible', 'off')
+set(handles.panel_param, 'visible', 'off')
+
 
 
 
@@ -430,6 +442,8 @@ function tab_gr_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 set(handles.panel_kreis, 'visible', 'on')
 set(handles.panel_gr, 'visible', 'on')
+set(handles.panel_param, 'visible', 'off')
+
 
 
 
@@ -502,13 +516,21 @@ radius = str2double(get(handles.kf_radius, 'String'));
 assignin('base','radius', radius);
 EG = 0.0058;
 SG = 0.0049;
-m = str2double(get(handles.m, 'String')); 
-theta = str2double(get(handles.theta, 'String')); 
-lv = str2double(get(handles.lv, 'String')); 
-l = str2double(get(handles.l, 'String')); 
-lh = l - lv;
+
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% m = str2double(get(handles.m, 'String')); 
+% theta = str2double(get(handles.theta, 'String')); 
+% lv = str2double(get(handles.lv, 'String')); 
+% l = str2double(get(handles.l, 'String')); 
+% lh = l - lv;
+
 axes(handles.plot6);
-%plot();
 Plot_4_6_2(handles.plot6, radius, 9.81, lv, lh, EG, SG, 16, m, theta)
 xlabel(handles.plot6,'Zeit')
 ylabel(handles.plot6,'Geschwindigkeit')
@@ -523,10 +545,100 @@ axes(handles.plot7);
 
 EG = 0.0058;
 SG = 0.0049;
-m = str2double(get(handles.m, 'String')); 
-theta = str2double(get(handles.theta, 'String')); 
-lv = str2double(get(handles.lv, 'String')); 
-l = str2double(get(handles.l, 'String')); 
-lh = l - lv;
+
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+
+% m = str2double(get(handles.m, 'String')); 
+% theta = str2double(get(handles.theta, 'String')); 
+% lv = str2double(get(handles.lv, 'String')); 
+% l = str2double(get(handles.l, 'String')); 
+% lh = l - lv;
+
 Plot_4_8(handles.plot7,9.81, lv, lh, EG, SG, 16, m, theta)
+
+
+% --- Executes on button press in tab_fzgparam.
+function tab_fzgparam_Callback(hObject, eventdata, handles)
+% hObject    handle to tab_fzgparam (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.panel_kreis, 'visible', 'on')
+set(handles.panel_gr, 'visible', 'on')
+set(handles.panel_param, 'visible', 'on')
+
+
+% --- Executes on button press in btn_fzgparam.
+function btn_fzgparam_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_fzgparam (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+b = get(handles.beschleunigung, 'String');
+beschleunigung = str2double(b);
+assignin('base','beschleunigung',beschleunigung);
+
+x0 = str2double(get(handles.x0, 'String')); 
+assignin('base','x0', x0);
+
+dt = str2double(get(handles.dt, 'String')); 
+assignin('base','dt',dt);
+
+A = [1;0];
+Ad = eye(2) + A * dt;
+assignin('base','A',A);
+assignin('base','Ad',Ad);
+Bd = [dt^2/2;dt];
+assignin('base','Bd',Bd);
+C = eye(2);
+assignin('base','C',C);
+D = [0;0];
+assignin('base','D',D);
+
+m = str2double(get(handles.m, 'String')); 
+assignin('base','m',m);
+
+theta = str2double(get(handles.theta, 'String')); 
+assignin('base','theta',theta);
+
+Cv = str2double(get(handles.Cv, 'String')); 
+assignin('base','Cv',Cv);
+
+Ch = str2double(get(handles.Ch, 'String')); 
+assignin('base','Ch',Ch);
+
+h = str2double(get(handles.h, 'String')); 
+assignin('base','h',h);
+
+l = str2double(get(handles.l, 'String')); 
+assignin('base','l',l);
+
+lv = str2double(get(handles.lv, 'String')); 
+assignin('base','lv',lv);
+
+psi = lv/l;
+assignin('base','psi',psi);
+chi = h/l;
+assignin('base','chi',chi);
+
+z_top =(psi/chi);
+assignin('base','z_top',z_top);
+z_bottom = (-((1-psi)/chi));
+assignin('base','z_bottom',z_bottom);
+
+z = z_bottom:0.1:z_top;
+assignin('base','z',z);
+FBv = (z.*(1-psi+z.*chi));
+assignin('base','FBv',FBv);
+FBh = (z.*(psi-z.*chi));
+assignin('base','FBh',FBh);
+
+acc_brakes = [ 0 0 0 1 8 8];
+assignin('base','acc_brakes',acc_brakes);
+acc_breakpoints = 0:1:5;
+assignin('base','acc_breakpoints',acc_breakpoints);
+
 
