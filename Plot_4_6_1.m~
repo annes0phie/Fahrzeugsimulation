@@ -1,6 +1,6 @@
 function Plot_4_6_1(plotInstance, vStart, gravity, lv, lh, lEG, lSG, is, m, theta)
 
-deltaControlled = 0; %konst v
+deltaControlled = 0; %konst 
 deltaH = 0:0.02:6;
 v = vStart;
 g = gravity;

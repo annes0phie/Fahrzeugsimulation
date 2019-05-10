@@ -502,7 +502,17 @@ v2 = str2double(get(handles.kf_geschw, 'String'));
 assignin('base','v2', v2);
 
 axes(handles.plot5);
-%isnt working
+radius = str2double(get(handles.kf_radius, 'String')); 
+assignin('base','radius', radius);
+EG = 0.0058;
+SG = 0.0049;
+
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
 
 
 

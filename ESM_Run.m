@@ -3,6 +3,8 @@ function [ay_val, delta_val, dpsi_val] = ESM_Run(simTime, simStep, deltaH, rSoll
 
 %% Init Values
 mDivTheta = m / theta;
+pathelse =0;
+pathif=0;
 
 % Grads to CStern
 %EG = 0.1; % 0.0058
@@ -29,10 +31,12 @@ params.assignin('ChStern',ChStern);
 params.assignin('is',is);
 params.assignin('mDivTheta',mDivTheta);
 params.assignin('g',g);
+params.assignin('pathif',pathif);
+params.assignin('pathelse',pathelse);
 
 
 %% Simulate
-simOut = sim('Querdynamik','Solver','ode4','FixedStep',num2str(simStep),'StopTime',num2str(simTime));
+simOut = sim('Querdynamik','Solver','ode4','FixedStep',num2str(simStep),'StopTime',num2str(simTime),'debug', 'off');
 %simOut.who
 ay = simOut.get('ay');
 delta = simOut.get('delta');

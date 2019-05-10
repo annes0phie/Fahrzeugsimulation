@@ -1,5 +1,5 @@
 function Plot_4_6_2(plotInstance, rSoll, gravity, lv, lh, lEG, lSG, is, m, theta)
-deltaControlled = 1;
+deltaControlled = 1; %konstanter radius
 deltaH = 1;
 v = 2.5:1.0:20.0;
 g = gravity;
