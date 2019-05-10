@@ -453,85 +453,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in btn_start_geschw.
-function btn_start_geschw_Callback(hObject, eventdata, handles)
-% hObject    handle to btn_start_geschw (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-v2 = str2double(get(handles.kf_geschw, 'String')); 
-assignin('base','v2', v2);
-
-axes(handles.plot5);
-radius = str2double(get(handles.kf_radius, 'String')); 
-assignin('base','radius', radius);
-EG = 0.0058;
-SG = 0.0049;
-
-m = evalin('base', 'm');
-theta = evalin('base', 'theta');
-lv = evalin('base', 'lv');
-l = evalin('base', 'l');
-lh = l-lv;
-Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
-
-
-
-% --- Executes on button press in btn_start_radius.
-function btn_start_radius_Callback(hObject, eventdata, handles)
-% hObject    handle to btn_start_radius (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-radius = str2double(get(handles.kf_radius, 'String')); 
-assignin('base','radius', radius);
-EG = 0.0058;
-SG = 0.0049;
-
-m = evalin('base', 'm');
-theta = evalin('base', 'theta');
-lv = evalin('base', 'lv');
-l = evalin('base', 'l');
-lh = l-lv;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% m = str2double(get(handles.m, 'String')); 
-% theta = str2double(get(handles.theta, 'String')); 
-% lv = str2double(get(handles.lv, 'String')); 
-% l = str2double(get(handles.l, 'String')); 
-% lh = l - lv;
-
-axes(handles.plot6);
-Plot_4_6_2(handles.plot6, radius, 9.81, lv, lh, EG, SG, 16, m, theta)
-xlabel(handles.plot6,'Zeit')
-ylabel(handles.plot6,'Geschwindigkeit')
-
-% --- Executes on button press in btn_gr_start.
-function btn_gr_start_Callback(hObject, eventdata, handles)
-% hObject    handle to btn_gr_start (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-axes(handles.plot7);
-
-EG = 0.0058;
-SG = 0.0049;
-
-m = evalin('base', 'm');
-theta = evalin('base', 'theta');
-lv = evalin('base', 'lv');
-l = evalin('base', 'l');
-lh = l-lv;
-
-% m = str2double(get(handles.m, 'String')); 
-% theta = str2double(get(handles.theta, 'String')); 
-% lv = str2double(get(handles.lv, 'String')); 
-% l = str2double(get(handles.l, 'String')); 
-% lh = l - lv;
-
-Plot_4_8(handles.plot7,9.81, lv, lh, EG, SG, 16, m, theta)
-
-
 % --- Executes on button press in tab_fzgparam.
 function tab_fzgparam_Callback(hObject, eventdata, handles)
 % hObject    handle to tab_fzgparam (see GCBO)
@@ -755,19 +676,22 @@ function btn_start_geschw_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_start_geschw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(handles.btn_fzgparam,'Enable','off')
-set(handles.btn_gr_start,'Enable','off')
-set(handles.btn_start_radius,'Enable','off')
-set(handles.btn_start_geschw,'Enable','off')
-set(handles.btn_Laengsd,'Enable','off')
-
-cla(handles.plot5)
-
 v2 = str2double(get(handles.kf_geschw, 'String')); 
 assignin('base','v2', v2);
-
+ 
 axes(handles.plot5);
-%isnt working
+radius = str2double(get(handles.kf_radius, 'String')); 
+assignin('base','radius', radius);
+EG = 0.0058;
+SG = 0.0049;
+ 
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
+
 set(handles.btn_fzgparam,'Enable','on')
 set(handles.btn_gr_start,'Enable','on')
 set(handles.btn_start_geschw,'Enable','on')
