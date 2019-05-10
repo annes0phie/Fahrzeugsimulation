@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 10-May-2019 08:50:06
+% Last Modified by GUIDE v2.5 10-May-2019 17:12:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,6 +57,78 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+
+b = get(handles.beschleunigung, 'String');
+beschleunigung = str2double(b);
+assignin('base','beschleunigung',beschleunigung);
+
+x0 = str2double(get(handles.x0, 'String')); 
+assignin('base','x0', x0);
+
+dt = str2double(get(handles.dt, 'String')); 
+assignin('base','dt',dt);
+
+A = [1;0];
+Ad = eye(2) + A * dt;
+assignin('base','A',A);
+assignin('base','Ad',Ad);
+Bd = [dt^2/2;dt];
+assignin('base','Bd',Bd);
+C = eye(2);
+assignin('base','C',C);
+D = [0;0];
+assignin('base','D',D);
+
+m = str2double(get(handles.m, 'String')); 
+assignin('base','m',m);
+
+theta = str2double(get(handles.theta, 'String')); 
+assignin('base','theta',theta);
+
+Cv = str2double(get(handles.Cv, 'String')); 
+assignin('base','Cv',Cv);
+
+Ch = str2double(get(handles.Ch, 'String')); 
+assignin('base','Ch',Ch);
+
+h = str2double(get(handles.h, 'String')); 
+assignin('base','h',h);
+
+l = str2double(get(handles.l, 'String')); 
+assignin('base','l',l);
+
+lv = str2double(get(handles.lv, 'String')); 
+assignin('base','lv',lv);
+
+psi = lv/l;
+assignin('base','psi',psi);
+chi = h/l;
+assignin('base','chi',chi);
+
+z_top =(psi/chi);
+assignin('base','z_top',z_top);
+z_bottom = (-((1-psi)/chi));
+assignin('base','z_bottom',z_bottom);
+
+z = z_bottom:0.1:z_top;
+assignin('base','z',z);
+FBv = (z.*(1-psi+z.*chi));
+assignin('base','FBv',FBv);
+FBh = (z.*(psi-z.*chi));
+assignin('base','FBh',FBh);
+
+acc_brakes = [ 0 0 0 1 8 8];
+assignin('base','acc_brakes',acc_brakes);
+acc_breakpoints = 0:1:5;
+assignin('base','acc_breakpoints',acc_breakpoints);
+
+cla(handles.plot1)
+cla(handles.plot2)
+cla(handles.plot3)
+cla(handles.plot4)
+cla(handles.plot5)
+cla(handles.plot6)
+cla(handles.plot7)
 
 % UIWAIT makes GUI_Fahrdynamik wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -300,117 +372,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on button press in btnL.
-function btnL_Callback(hObject, eventdata, handles)
-% hObject    handle to btnL (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-%guidata(hObject, handles);
-
-% b = get(handles.beschleunigung, 'String');
-% beschleunigung = str2double(b);
-% assignin('base','beschleunigung',beschleunigung);
-
-x0 = str2double(get(handles.x0, 'String')); 
-assignin('base','x0', x0);
-
-% dt = str2double(get(handles.dt, 'String')); 
-% assignin('base','dt',dt);
-% 
-% A = [1;0];
-% Ad = eye(2) + A * dt;
-% assignin('base','A',A);
-% assignin('base','Ad',Ad);
-% Bd = [dt^2/2;dt];
-% assignin('base','Bd',Bd);
-% C = eye(2);
-% assignin('base','C',C);
-% D = [0;0];
-% assignin('base','D',D);
-% 
-% m = str2double(get(handles.m, 'String')); 
-% assignin('base','m',m);
-% 
-% theta = str2double(get(handles.theta, 'String')); 
-% assignin('base','theta',theta);
-% 
-% Cv = str2double(get(handles.Cv, 'String')); 
-% assignin('base','Cv',Cv);
-% 
-% Ch = str2double(get(handles.Ch, 'String')); 
-% assignin('base','Ch',Ch);
-% 
-% h = str2double(get(handles.h, 'String')); 
-% assignin('base','h',h);
-% 
-% l = str2double(get(handles.l, 'String')); 
-% assignin('base','l',l);
-% 
-% lv = str2double(get(handles.lv, 'String')); 
-% assignin('base','lv',lv);
-% 
-% psi = lv/l;
-% assignin('base','psi',psi);
-% chi = h/l;
-% assignin('base','chi',chi);
-% 
-% z_top =(psi/chi);
-% assignin('base','z_top',z_top);
-% z_bottom = (-((1-psi)/chi));
-% assignin('base','z_bottom',z_bottom);
-% 
-% z = z_bottom:0.1:z_top;
-% assignin('base','z',z);
-% FBv = (z.*(1-psi+z.*chi));
-% assignin('base','FBv',FBv);
-% FBh = (z.*(psi-z.*chi));
-% assignin('base','FBh',FBh);
-% 
-% acc_brakes = [ 0 0 0 1 8 8];
-% assignin('base','acc_brakes',acc_brakes);
-% acc_breakpoints = 0:1:5;
-% assignin('base','acc_breakpoints',acc_breakpoints);
-
-simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
-v = simout.get('v');
-assignin('base','v',v);
-t = simout.get('t');
-assignin('base','t',t);
-s = simout.get('s');
-assignin('base','s',s);
-a = simout.get('a');
-assignin('base','a',a);
-
-FBv = evalin('base', 'FBv');
-FBh = evalin('base', 'FBh');
-t = evalin('base', 't');
-v = evalin('base', 'v');
-s = evalin('base', 's');
-a = evalin('base', 'a');
-
-
-
-axes(handles.plot1);
-plot(FBv, FBh);
-xlabel(handles.plot1,'FBv')
-ylabel(handles.plot1,'FBh')
-
-axes(handles.plot2);
-plot(t, v);
-xlabel(handles.plot2,'Zeit')
-ylabel(handles.plot2,'Geschwindigkeit')
-
-axes(handles.plot3);
-plot(t, s);
-xlabel(handles.plot3,'Zeit')
-ylabel(handles.plot3,'Strecke')
-
-axes(handles.plot4);
-plot(t, a);
-xlabel(handles.plot4,'Zeit')
-ylabel(handles.plot4,'Beschleunigung')
-
 
 % --- Executes on button press in tab_ld.
 function tab_ld_Callback(hObject, eventdata, handles)
@@ -587,6 +548,12 @@ function btn_fzgparam_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
 b = get(handles.beschleunigung, 'String');
 beschleunigung = str2double(b);
 assignin('base','beschleunigung',beschleunigung);
@@ -651,4 +618,195 @@ assignin('base','acc_brakes',acc_brakes);
 acc_breakpoints = 0:1:5;
 assignin('base','acc_breakpoints',acc_breakpoints);
 
+set(handles.btn_fzgparam,'Enable','on')
+set(handles.btn_gr_start,'Enable','on')
+set(handles.btn_start_geschw,'Enable','on')
+set(handles.btn_start_radius,'Enable','on')
+set(handles.btn_Laengsd,'Enable','on')
 
+
+% --- Executes on button press in btn_Laengsd.
+function btn_Laengsd_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_Laengsd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
+cla(handles.plot1)
+cla(handles.plot2)
+cla(handles.plot3)
+cla(handles.plot4)
+
+x0 = str2double(get(handles.x0, 'String')); 
+assignin('base','x0', x0);
+simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
+v = simout.get('v');
+assignin('base','v',v);
+t = simout.get('t');
+assignin('base','t',t);
+s = simout.get('s');
+assignin('base','s',s);
+a = simout.get('a');
+assignin('base','a',a);
+
+FBv = evalin('base', 'FBv');
+FBh = evalin('base', 'FBh');
+t = evalin('base', 't');
+v = evalin('base', 'v');
+s = evalin('base', 's');
+a = evalin('base', 'a');
+l = evalin('base', 'l');
+lv = evalin('base', 'lv');
+h = evalin('base', 'h');
+
+axes(handles.plot1);
+
+plot(FBv, FBh)
+sFBh = size(FBh);
+sFBv = size(FBv);
+
+maxFBh = (lv/l)*(lv/l)/(4*(h/l));
+maxFBhFBv = (lv/l)*(2-(lv/l))/(4*(h/l));
+maxFBv = -(1-(lv/l))*(1-(lv/l))/(4 * (h/l));
+maxFBvFBh = -(1-(lv/l)*(lv/l))/(4*(h/l));
+
+x = FBh(end)*ones(sFBh(2), 1);
+y = FBv(1)*ones(sFBv(2), 1);
+
+hold on;
+            
+plot([0 maxFBhFBv maxFBhFBv],[maxFBh maxFBh 0], 'color', [0.0 0.0 0.0]);
+plot([0 maxFBv maxFBv],[maxFBvFBh maxFBvFBh 0], 'color', [0.0 0.0 0.0]);
+plot(FBv, x, 'color', [0.0 0.0 0.0])
+plot(y, FBh, 'color', [0.0 0.0 0.0])
+plot(maxFBhFBv, maxFBh, '*', 'color', [1.0 0.0 0.0])
+plot(maxFBv, maxFBvFBh, '*', 'color', [1.0 0.0 0.0])
+hold off;
+xlabel(handles.plot1,'FBv')
+ylabel(handles.plot1,'FBh')
+grid on;
+
+axes(handles.plot2);
+plot(t, v);
+xlabel(handles.plot2,'Zeit')
+ylabel(handles.plot2,'Geschwindigkeit')
+grid on;
+
+axes(handles.plot3);
+plot(t, s);
+xlabel(handles.plot3,'Zeit')
+ylabel(handles.plot3,'Strecke')
+grid on;
+
+axes(handles.plot4);
+plot(t, a);
+xlabel(handles.plot4,'Zeit')
+ylabel(handles.plot4,'Beschleunigung')
+grid on;
+
+set(handles.btn_fzgparam,'Enable','on')
+set(handles.btn_gr_start,'Enable','on')
+set(handles.btn_start_radius,'Enable','on')
+set(handles.btn_start_geschw,'Enable','on')
+set(handles.btn_Laengsd,'Enable','on')
+
+
+% --- Executes on button press in btn_gr_start.
+function btn_gr_start_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_gr_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
+cla(handles.plot7)
+
+axes(handles.plot7);
+
+EG = 0.0058;
+SG = 0.0049;
+
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+
+Plot_4_8(handles.plot7,9.81, lv, lh, EG, SG, 16, m, theta)
+
+set(handles.btn_fzgparam,'Enable','on')
+set(handles.btn_gr_start,'Enable','on')
+set(handles.btn_start_geschw,'Enable','on')
+set(handles.btn_start_radius,'Enable','on')
+set(handles.btn_Laengsd,'Enable','on')
+
+
+% --- Executes on button press in btn_start_geschw.
+function btn_start_geschw_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_start_geschw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
+cla(handles.plot5)
+
+v2 = str2double(get(handles.kf_geschw, 'String')); 
+assignin('base','v2', v2);
+
+axes(handles.plot5);
+%isnt working
+set(handles.btn_fzgparam,'Enable','on')
+set(handles.btn_gr_start,'Enable','on')
+set(handles.btn_start_geschw,'Enable','on')
+set(handles.btn_start_radius,'Enable','on')
+set(handles.btn_Laengsd,'Enable','on')
+
+
+% --- Executes on button press in btn_start_radius.
+function btn_start_radius_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_start_radius (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
+cla(handles.plot6)
+
+radius = str2double(get(handles.kf_radius, 'String')); 
+assignin('base','radius', radius);
+EG = 0.0058;
+SG = 0.0049;
+
+m = evalin('base', 'm');
+theta = evalin('base', 'theta');
+lv = evalin('base', 'lv');
+l = evalin('base', 'l');
+lh = l-lv;
+
+axes(handles.plot6);
+Plot_4_6_2(handles.plot6, radius, 9.81, lv, lh, EG, SG, 16, m, theta)
+xlabel(handles.plot6,'Zeit')
+ylabel(handles.plot6,'Geschwindigkeit')
+
+set(handles.btn_fzgparam,'Enable','on')
+set(handles.btn_gr_start,'Enable','on')
+set(handles.btn_start_geschw,'Enable','on')
+set(handles.btn_start_radius,'Enable','on')
+set(handles.btn_Laengsd,'Enable','on')
