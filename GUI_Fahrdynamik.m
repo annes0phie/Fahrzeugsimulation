@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 10-May-2019 17:12:28
+% Last Modified by GUIDE v2.5 11-May-2019 16:35:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,9 +58,8 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-b = get(handles.beschleunigung, 'String');
-beschleunigung = str2double(b);
-assignin('base','beschleunigung',beschleunigung);
+a = str2double(get(handles.beschleunigung, 'String'));
+assignin('base','a',a);
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
@@ -652,6 +651,12 @@ function btn_start_geschw_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_start_geschw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
 v2 = str2double(get(handles.kf_geschw, 'String')); 
 assignin('base','v2', v2);
  
