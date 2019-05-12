@@ -637,6 +637,8 @@ set(handles.btn_start_geschw,'Enable','off')
 set(handles.btn_start_radius,'Enable','off')
 set(handles.btn_Laengsd,'Enable','off')
 
+cla(handles.plot5)
+
 v2 = str2double(get(handles.kf_geschw, 'String')); 
 assignin('base','v2', v2);
  
