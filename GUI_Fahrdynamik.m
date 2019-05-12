@@ -654,7 +654,7 @@ lh = l-lv;
 EG = evalin('base', 'EG');
 SG = evalin('base', 'SG');
 
-Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
+Plot_4_6(handles.plot5,'Plot_4_6_1', v2, 9.81, lv, lh, EG, SG, 16, m, theta)
 
 
 set(handles.btn_fzgparam,'Enable','on')
