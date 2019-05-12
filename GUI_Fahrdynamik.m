@@ -58,14 +58,13 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-a = str2double(get(handles.beschleunigung, 'String'));
-assignin('base','a',a);
+% a = str2double(get(handles.beschleunigung, 'String'));
+% assignin('base','a',a);
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
 
-dt = str2double(get(handles.dt, 'String')); 
-assignin('base','dt',dt);
+dt = 0.001;
 
 A = [1;0];
 Ad = eye(2) + A * dt;
@@ -480,15 +479,12 @@ set(handles.btn_start_geschw,'Enable','off')
 set(handles.btn_start_radius,'Enable','off')
 set(handles.btn_Laengsd,'Enable','off')
 
-b = get(handles.beschleunigung, 'String');
-beschleunigung = str2double(b);
-assignin('base','beschleunigung',beschleunigung);
+
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
 
-dt = str2double(get(handles.dt, 'String')); 
-assignin('base','dt',dt);
+dt = 0.001;
 
 A = [1;0];
 Ad = eye(2) + A * dt;

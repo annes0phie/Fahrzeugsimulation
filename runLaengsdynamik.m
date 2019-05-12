@@ -21,8 +21,7 @@ function runLaengsdynamik(plotV,plotS,plotA,plotFBvh)
 
 
     Plot_3_7(plotFBvh,FBv,FBh,lv,l,h);
-
- 
+    
     plot(plotV,t, v);
     xlabel(plotV,'Zeit')
     ylabel(plotV,'Geschwindigkeit')
@@ -39,5 +38,6 @@ function runLaengsdynamik(plotV,plotS,plotA,plotFBvh)
     xlabel(plotA,'Zeit')
     ylabel(plotA,'Beschleunigung')
     grid(plotA,'on');
+    
 end
 

@@ -24,14 +24,14 @@ function Plot_4_6(plotInstance, subplot, VorR, gravity, lv, lh, lEG, lSG, is, m,
     SG = lSG;  % SG must be greater than min(EG)!
 
     ChStern = 1./(g*SG);
-    CvStern = convGradToCStern(EG, 0, g, ChStern);
+    CvStern = 1./(g*(EG+(1./(g*ChStern))));
 
-    colors = [[0 0 0.5], [0.8 0.4 0], [0.5 0 0]];
+    colors = ['r', 'g', 'b'];
 
     hold(plotInstance,'off');
     for k = 1:size(CvStern,2)
         [ay_val, delta_val] = runQuerdynamik(simTime, simStep, deltaH, rSoll, v, CvStern(k), ChStern, deltaControlled, lv, lh, is, m, theta, g);
-        plot(plotInstance, ay_val, delta_val, 'LineWidth', 2, 'Color', colors((k-1)*3+1:k*3));
+        plot(plotInstance, ay_val, delta_val, 'LineWidth', 2, 'Color', colors(k));
         hold(plotInstance,'on');
     end
     grid(plotInstance,'on');
