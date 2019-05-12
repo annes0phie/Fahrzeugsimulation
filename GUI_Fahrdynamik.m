@@ -565,46 +565,12 @@ cla(handles.plot4)
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
-simout = sim('startFahrdym', 'Solver', 'FixedStepDiscrete', 'FixedStep', '0.001', 'Stoptime', '10');
-v = simout.get('v');
-assignin('base','v',v);
-t = simout.get('t');
-assignin('base','t',t);
-s = simout.get('s');
-assignin('base','s',s);
-a = simout.get('a');
-assignin('base','a',a);
-
-FBv = evalin('base', 'FBv');
-FBh = evalin('base', 'FBh');
-t = evalin('base', 't');
-v = evalin('base', 'v');
-s = evalin('base', 's');
-a = evalin('base', 'a');
-l = evalin('base', 'l');
-lv = evalin('base', 'lv');
-h = evalin('base', 'h');
 
 axes(handles.plot1);
-Plot_3_7(handles.plot1,FBv,FBh,lv,l,h);
-
 axes(handles.plot2);
-plot(t, v);
-xlabel(handles.plot2,'Zeit')
-ylabel(handles.plot2,'Geschwindigkeit')
-grid on;
-
 axes(handles.plot3);
-plot(t, s);
-xlabel(handles.plot3,'Zeit')
-ylabel(handles.plot3,'Strecke')
-grid on;
-
 axes(handles.plot4);
-plot(t, a);
-xlabel(handles.plot4,'Zeit')
-ylabel(handles.plot4,'Beschleunigung')
-grid on;
+runLaengsdynamik(handles.plot2,handles.plot3,handles.plot4,handles.plot1);
 
 set(handles.btn_fzgparam,'Enable','on')
 set(handles.btn_gr_start,'Enable','on')
@@ -666,7 +632,8 @@ theta = evalin('base', 'theta');
 lv = evalin('base', 'lv');
 l = evalin('base', 'l');
 lh = l-lv;
-Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
+Plot_4_6(handles.plot5,'Plot_4_6_1', v2, 9.81, lv, lh, EG, SG, 16, m, theta)
+
 
 set(handles.btn_fzgparam,'Enable','on')
 set(handles.btn_gr_start,'Enable','on')
@@ -701,9 +668,8 @@ l = evalin('base', 'l');
 lh = l-lv;
 
 axes(handles.plot6);
-Plot_4_6_2(handles.plot6, radius, 9.81, lv, lh, EG, SG, 16, m, theta)
-xlabel(handles.plot6,'Zeit')
-ylabel(handles.plot6,'Geschwindigkeit')
+Plot_4_6(handles.plot6, 'Plot_4_6_2',radius, 9.81, lv, lh, EG, SG, 16, m, theta)
+
 
 set(handles.btn_fzgparam,'Enable','on')
 set(handles.btn_gr_start,'Enable','on')
