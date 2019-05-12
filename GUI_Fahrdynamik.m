@@ -22,7 +22,7 @@ function varargout = GUI_Fahrdynamik(varargin)
 
 % Edit the above text to modify the response to help GUI_Fahrdynamik
 
-% Last Modified by GUIDE v2.5 10-May-2019 17:12:28
+% Last Modified by GUIDE v2.5 12-May-2019 10:02:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,9 +58,8 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-b = get(handles.beschleunigung, 'String');
-beschleunigung = str2double(b);
-assignin('base','beschleunigung',beschleunigung);
+a = str2double(get(handles.beschleunigung, 'String'));
+assignin('base','a',a);
 
 x0 = str2double(get(handles.x0, 'String')); 
 assignin('base','x0', x0);
@@ -93,6 +92,12 @@ assignin('base','Ch',Ch);
 
 h = str2double(get(handles.h, 'String')); 
 assignin('base','h',h);
+
+SG = str2double(get(handles.SG, 'String')); 
+assignin('base','SG',SG);
+
+EG = str2double(get(handles.EG, 'String')); 
+assignin('base','EG',EG);
 
 l = str2double(get(handles.l, 'String')); 
 assignin('base','l',l);
@@ -511,6 +516,12 @@ assignin('base','Ch',Ch);
 h = str2double(get(handles.h, 'String')); 
 assignin('base','h',h);
 
+SG = str2double(get(handles.SG, 'String')); 
+assignin('base','SG',SG);
+
+EG = str2double(get(handles.EG, 'String')); 
+assignin('base','EG',EG);
+
 l = str2double(get(handles.l, 'String')); 
 assignin('base','l',l);
 
@@ -595,14 +606,16 @@ cla(handles.plot7)
 
 axes(handles.plot7);
 
-EG = 0.0058;
-SG = 0.0049;
+%EG = 0.0058;
+%SG = 0.0049;
 
 m = evalin('base', 'm');
 theta = evalin('base', 'theta');
 lv = evalin('base', 'lv');
 l = evalin('base', 'l');
 lh = l-lv;
+EG = evalin('base', 'EG');
+SG = evalin('base', 'SG');
 
 Plot_4_8(handles.plot7,9.81, lv, lh, EG, SG, 16, m, theta)
 
@@ -618,21 +631,30 @@ function btn_start_geschw_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_start_geschw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+set(handles.btn_fzgparam,'Enable','off')
+set(handles.btn_gr_start,'Enable','off')
+set(handles.btn_start_geschw,'Enable','off')
+set(handles.btn_start_radius,'Enable','off')
+set(handles.btn_Laengsd,'Enable','off')
+
 v2 = str2double(get(handles.kf_geschw, 'String')); 
 assignin('base','v2', v2);
  
 axes(handles.plot5);
 radius = str2double(get(handles.kf_radius, 'String')); 
 assignin('base','radius', radius);
-EG = 0.0058;
-SG = 0.0049;
+%EG = 0.0058;
+%SG = 0.0049;
  
 m = evalin('base', 'm');
 theta = evalin('base', 'theta');
 lv = evalin('base', 'lv');
 l = evalin('base', 'l');
 lh = l-lv;
-Plot_4_6(handles.plot5,'Plot_4_6_1', v2, 9.81, lv, lh, EG, SG, 16, m, theta)
+EG = evalin('base', 'EG');
+SG = evalin('base', 'SG');
+
+Plot_4_6_1(handles.plot5, 30, 9.81, lv, lh, EG, SG, 16, m, theta)
 
 
 set(handles.btn_fzgparam,'Enable','on')
@@ -658,14 +680,17 @@ cla(handles.plot6)
 
 radius = str2double(get(handles.kf_radius, 'String')); 
 assignin('base','radius', radius);
-EG = 0.0058;
-SG = 0.0049;
+%EG = 0.0058;
+%SG = 0.0049;
 
 m = evalin('base', 'm');
 theta = evalin('base', 'theta');
 lv = evalin('base', 'lv');
 l = evalin('base', 'l');
 lh = l-lv;
+
+EG = evalin('base', 'EG');
+SG = evalin('base', 'SG');
 
 axes(handles.plot6);
 Plot_4_6(handles.plot6, 'Plot_4_6_2',radius, 9.81, lv, lh, EG, SG, 16, m, theta)
@@ -676,3 +701,49 @@ set(handles.btn_gr_start,'Enable','on')
 set(handles.btn_start_geschw,'Enable','on')
 set(handles.btn_start_radius,'Enable','on')
 set(handles.btn_Laengsd,'Enable','on')
+
+
+
+function EG_Callback(hObject, eventdata, handles)
+% hObject    handle to EG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EG as text
+%        str2double(get(hObject,'String')) returns contents of EG as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EG_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function SG_Callback(hObject, eventdata, handles)
+% hObject    handle to SG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SG as text
+%        str2double(get(hObject,'String')) returns contents of SG as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function SG_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
